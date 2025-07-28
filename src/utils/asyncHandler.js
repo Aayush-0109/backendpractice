@@ -1,15 +1,12 @@
-const asyncHandler =(fn)=> async(req,res,next) =>{
-    // try {
-    //     await fn(req,res,next)
-    // } catch (error) {
-    //     res.status(error.code || 500).json({
-    //         success : false,
-    //         message : error.message
-    //     })
-    // }
+import { ApiError } from "./ApiError.js"
+
+const asyncHandler =(fn ,message)=> async(req,res,next) =>{
+   
 
 
-    Promise.resolve(fn(req,res,next)).catch((error)=> next(error))
+    Promise.resolve(fn(req,res,next)).catch((error)=> next(
+        new ApiError(error.statusCode || 500 , `error in ${message} : ${error.message}`)
+    ))
 
 }
 export { asyncHandler}
